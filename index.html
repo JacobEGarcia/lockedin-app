@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LockedIn - Professional Network for the Extremely Focused</title>
+<style>
+:root{--bg:#0a0f14;--ink:#d8e4ec;--dim:#6b8090;--accent:#38bdf8;--line:#1a2630;--card:#111a22}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 14px}
+h1{font-size:24px;letter-spacing:5px;color:var(--accent);text-transform:uppercase}
+h1 span{color:var(--ink)}
+.sub{color:var(--dim);letter-spacing:2px;font-size:10.5px;text-transform:uppercase;margin-top:6px}
+#hud{font-size:12px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin:14px 0;text-align:center;line-height:2}
+#hud b{color:var(--accent)}
+button{cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:11px 16px;font-family:inherit;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;transition:border-color .15s;margin:4px}
+button:hover{border-color:var(--accent)}
+#feed{width:min(580px,94vw);margin-top:14px;display:grid;gap:10px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:15px 17px}
+.post .who{font-size:12px;color:var(--accent);letter-spacing:1px;margin-bottom:6px}
+.post .body{font-size:13px;line-height:1.7}
+.post .meta{font-size:10.5px;color:var(--dim);margin-top:8px;letter-spacing:1px}
+</style>
+</head>
+<body>
+<h1>Locked<span>In</span></h1>
+<div class="sub">linkedin, but everyone is dialed all the way in</div>
+<div id="hud"></div>
+<div>
+<button id="connect">Send a connect</button>
+<button id="post">Post an insight</button>
+<button id="grind">Grind (1 hr)</button>
+</div>
+<div id="feed"></div>
+<script>
+const $=id=>document.getElementById(id);
+const S={focus:50,network:3,insights:0,streak:0};
+const NAMES=['Brad K., VP of Synergy','Monica L., 10x Thought Leader','Dave, CEO of Dave','Priya S., Hustle Sommelier','Greg, Disruptor','Ashley T., Chief Vision Officer','Tom, 5AM Club (President)'];
+const POSTS=['Just closed a deal on the treadmill. The treadmill was also a standing desk. The desk was a metaphor.','Woke up at 3:58 AM. If you woke up at 4, we are not the same.','I don\'t have hobbies. I have revenue streams with fandoms.','My kid asked me to play catch. I outsourced it. Synergy.','Failed 9 times this morning. That\'s 9 more data points than you.','Coffee is a crutch. I run on pure calendar density.','Just networked with my mirror. Great conversation. We both grew.','Sleep is just a poorly optimized meeting with yourself.'];
+const REPLIES=['This.','Agree?','Huge if true.','Following for more insights.','DM me "GRIND" for my course.'];
+function clamp(x){return Math.max(0,Math.min(100,x));}
+function hud(){$('hud').innerHTML='FOCUS <b>'+S.focus+'%</b> &middot; CONNECTIONS <b>'+S.network+'</b> &middot; INSIGHTS POSTED <b>'+S.insights+'</b> &middot; STREAK <b>'+S.streak+'d</b>';}
+function addPost(who,body,meta){
+ const d=document.createElement('div');d.className='post';
+ d.innerHTML='<div class="who">'+who+'</div><div class="body">'+body+'</div><div class="meta">'+meta+'</div>';
+ $('feed').prepend(d);
+ while($('feed').children.length>6)$('feed').lastChild.remove();
+}
+$('connect').onclick=()=>{
+ S.network++;S.focus=clamp(S.focus-4);
+ addPost(NAMES[Math.floor(Math.random()*NAMES.length)],'Accepted your connect request. "Let\'s circle back." (They will not circle back.)',Math.floor(Math.random()*900)+' reactions');
+ hud();};
+$('post').onclick=()=>{
+ S.insights++;S.focus=clamp(S.focus+6);
+ addPost('You',POSTS[Math.floor(Math.random()*POSTS.length)],REPLIES[Math.floor(Math.random()*REPLIES.length)]+' &middot; '+(Math.floor(Math.random()*40)+2)+' comments');
+ hud();};
+$('grind').onclick=()=>{
+ S.focus=clamp(S.focus+12);S.streak++;
+ addPost('You','Logged one more hour of deep work. The feed can wait. (It cannot.)','0 reactions &middot; nobody saw it &middot; that\'s the point');
+ if(S.focus>=100){S.focus=60;addPost('LockedIn','You achieved MAXIMUM LOCK. Badge earned: "Terminally Professional".','pinned');}
+ hud();};
+addPost(NAMES[0],POSTS[0],'412 reactions &middot; 88 comments');
+hud();
+</script>
+</body>
+</html>
